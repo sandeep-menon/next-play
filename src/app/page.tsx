@@ -12,11 +12,11 @@ export default function Home() {
   useGSAP(() => {
     const split = SplitText.create(".item-3", { type: "words" });
 
-    const tl = gsap.timeline({ defaults: {  duration: 1, ease: "power2.out" } });
-    tl.from(".item-1", { scale: 3, opacity: 0 })
-      .from(".item-2", { y: -100, opacity: 0 })
-      .from(split.words, { y: -100, opacity: 0, rotation: "random(-45, 45)", duration: 0.5, ease: "back", stagger: 0.1 })
-      .from(".item-4", { opacity: 0 })
+    const tl = gsap.timeline({ defaults: { delay: 0.5, duration: 1, ease: "power2.out" } });
+    tl.from(".item-1", { scale: 3, autoAlpha: 0 })
+      .from(".item-2", { y: -100, autoAlpha: 0 })
+      .from(split.words, { y: -100, autoAlpha: 0, rotation: "random(-45, 45)", duration: 0.5, ease: "back", stagger: 0.1 })
+      .from(".item-4", { autoAlpha: 0 });
   }, { scope: container });
 
   return (
