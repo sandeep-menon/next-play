@@ -120,3 +120,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+body {
+  background: radial-gradient(125% 125% at 50% 100%, #ffffff 10%, #010133 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.dark body {
+  background: radial-gradient(125% 125% at 50% 100%, #000000 40%, #010133 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
