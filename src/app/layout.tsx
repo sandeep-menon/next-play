@@ -32,7 +32,7 @@ export default function RootLayout({
         <header className="border-b sticky top-0 backdrop-blur-lg shadow-lg">
           <Navbar />
         </header>
-        <main className="flex-1 max-w-[1280px] mx-auto px-4">
+        <main className="flex-1 max-w-[1280px] md:mx-auto px-4">
           {children}
         </main>
         <footer className="border-t px-4">
