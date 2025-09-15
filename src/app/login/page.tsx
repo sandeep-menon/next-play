@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 
 import { loginSchema, signupSchema, type LoginInput, type SignUpInput } from "@/schemas/auth";
 import { useForm } from "react-hook-form";
@@ -47,6 +48,7 @@ export default function LoginPage() {
     const username = watch("username");
 
     const onLogin = (data: LoginInput) => {
+        toast.info("Something went wrong!");
         console.log("Login data: ", data);
         // TODO
     }
