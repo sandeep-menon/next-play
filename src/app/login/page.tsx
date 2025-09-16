@@ -14,6 +14,7 @@ import FormErrorMessage from "@/components/custom/FormErrorMessage";
 import { useEffect, useState } from "react";
 import FormLoadingMessage from "@/components/custom/FormLoadingMessage";
 import FormSuccessMessage from "@/components/custom/FormSuccessMessage";
+import { Loader } from "lucide-react";
 
 enum userNameStatuses {
     idle = "idle",
@@ -24,6 +25,7 @@ enum userNameStatuses {
 
 export default function LoginPage() {
     const [usernameStatus, setUsernameStatus] = useState<userNameStatuses>(userNameStatuses.idle);
+    const [loadingSignUp, setLoadingSignUp] = useState(false);
 
     const {
         register: registerLogin,
@@ -48,14 +50,31 @@ export default function LoginPage() {
     const username = watch("username");
 
     const onLogin = (data: LoginInput) => {
-        toast.info("Something went wrong!");
+        toast.info("Coming soon...");
         console.log("Login data: ", data);
         // TODO
     }
 
-    const onSignup = (data: SignUpInput) => {
-        console.log("Signup data: ", data);
-        // TODO
+    const onSignup = async (data: SignUpInput) => {
+        setLoadingSignUp(true);
+        const res = await fetch("/api/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                email: data.email,
+                username: data.username,
+                password: data.password,
+                retypePassword: data.retypePassword
+            })
+        });
+
+        const resp = await res.json();
+        if (res.status === 201) {
+            toast.success("Sign Up successful. Please proceed to Login.");
+        } else {
+            toast.error(resp.error);
+        }
+        setLoadingSignUp(false);
     }
 
     const handleReset = () => {
@@ -74,8 +93,7 @@ export default function LoginPage() {
 
         const handler = setTimeout(async () => {
             try {
-                // TODO
-                const res = await fakeCheckUsername(username);
+                const res = await checkUsername(username);
                 setUsernameStatus(res.available ? userNameStatuses.available : userNameStatuses.taken);
             } catch (err) {
                 setUsernameStatus(userNameStatuses.idle);
@@ -86,12 +104,17 @@ export default function LoginPage() {
         return () => clearTimeout(handler);
     }, [username]);
 
-    async function fakeCheckUsername(username: string): Promise<{ available: boolean }> {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                console.log("Checking username: ", username);
-                resolve({ available: true });
-            }, 2000);
+    async function checkUsername(username: string): Promise<{ available: boolean }> {
+        return new Promise(async (resolve) => {
+            if (username) {
+                const res = await fetch(`/api/check-username?username=${username}`);
+                if (res.status === 200) {
+                    resolve({ available: true });
+                } else {
+                    resolve({ available: false });
+                }
+            }
+            return;
         });
     }
 
@@ -169,7 +192,10 @@ export default function LoginPage() {
                                 </div>
                             </CardContent>
                             <CardFooter className="flex justify-between items-center">
-                                <Button type="submit">Sign Up</Button>
+                                <Button type="submit">
+                                    {loadingSignUp && <Loader className="animate-spin" />}
+                                    Sign Up
+                                </Button>
                                 <Button onClick={() => handleReset()} variant="ghost">Reset</Button>
                             </CardFooter>
                         </Card>
