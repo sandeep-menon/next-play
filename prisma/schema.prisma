@@ -23,3 +23,9 @@ model User {
   userConfig Json
   createdAt DateTime @default(now())
 }
+
+model TwitchToken {
+  id Int @id
+  token String
+  expiry DateTime
+}

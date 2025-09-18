@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import axios from "axios";
 
 import { loginSchema, signupSchema, type LoginInput, type SignUpInput } from "@/schemas/auth";
 import { useForm } from "react-hook-form";
@@ -57,22 +58,21 @@ export default function LoginPage() {
 
     const onSignup = async (data: SignUpInput) => {
         setLoadingSignUp(true);
-        const res = await fetch("/api/signup", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
+        try {
+            await axios.post("/api/signup", {
                 email: data.email,
                 username: data.username,
                 password: data.password,
                 retypePassword: data.retypePassword
-            })
-        });
-
-        const resp = await res.json();
-        if (res.status === 201) {
+            });
             toast.success("Sign Up successful. Please proceed to Login.");
-        } else {
-            toast.error(resp.error);
+        } catch (error) {
+            if (typeof error === "object" && error !== null && "response" in error) {
+                // @ts-expect-error: error.response is expected from axios
+                toast.error(error.response.data.error);
+            } else {
+                toast.error("An error occurred during sign up");
+            }
         }
         setLoadingSignUp(false);
     }
@@ -105,17 +105,16 @@ export default function LoginPage() {
     }, [username]);
 
     async function checkUsername(username: string): Promise<{ available: boolean }> {
-        return new Promise(async (resolve) => {
-            if (username) {
-                const res = await fetch(`/api/check-username?username=${username}`);
-                if (res.status === 200) {
-                    resolve({ available: true });
-                } else {
-                    resolve({ available: false });
-                }
+        if (username) {
+            try {
+                await axios.get(`/api/check-username?username=${username}`);
+                return { available: true };
+            } catch (error) {
+                console.log(error);
+                return { available: false };
             }
-            return;
-        });
+        }
+        return { available: false };
     }
 
 
