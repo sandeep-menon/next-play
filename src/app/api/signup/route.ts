@@ -46,7 +46,10 @@ export async function POST(request: NextRequest) {
                 username: username,
                 password: hashedPassword,
                 initials: email.charAt(0).toUpperCase() + username.charAt(0).toUpperCase(),
-                userConfig: {}
+                userConfig: {
+                    "platforms": [],
+                    "favourites": []
+                }
             }
         });
 

@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 import FormLoadingMessage from "@/components/custom/FormLoadingMessage";
 import FormSuccessMessage from "@/components/custom/FormSuccessMessage";
 import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/userStore";
 
 enum userNameStatuses {
     idle = "idle",
@@ -27,6 +29,9 @@ enum userNameStatuses {
 export default function LoginPage() {
     const [usernameStatus, setUsernameStatus] = useState<userNameStatuses>(userNameStatuses.idle);
     const [loadingSignUp, setLoadingSignUp] = useState(false);
+    const [loadingLogin, setLoadingLogin] = useState(false);
+    const router = useRouter();
+    const setUser = useUserStore((state) => state.setUser);
 
     const {
         register: registerLogin,
@@ -50,10 +55,25 @@ export default function LoginPage() {
 
     const username = watch("username");
 
-    const onLogin = (data: LoginInput) => {
-        toast.info("Coming soon...");
-        console.log("Login data: ", data);
-        // TODO
+    const onLogin = async (data: LoginInput) => {
+        try {
+            setLoadingLogin(true);
+            const res = await axios.post("/api/login", {
+                username: data.username,
+                password: data.password,
+            });
+
+            const { user } = res.data;
+
+            setUser(user);
+            toast.success("Login successful");
+            router.push("/explore");
+        } catch (error) {
+            console.error("Login failed: ", error);
+            toast.error("Login failed! Invalid credentials");
+        } finally {
+            setLoadingLogin(false);
+        }
     }
 
     const onSignup = async (data: SignUpInput) => {
@@ -147,7 +167,9 @@ export default function LoginPage() {
                                 </div>
                             </CardContent>
                             <CardFooter>
-                                <Button type="submit">Login</Button>
+                                <Button type="submit" disabled={loadingLogin}>
+                                    {loadingLogin && <Loader className="animate-spin" />}
+                                    Login</Button>
                             </CardFooter>
                         </Card>
                     </form>
