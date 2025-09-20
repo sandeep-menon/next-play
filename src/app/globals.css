@@ -137,3 +137,18 @@ body {
   opacity: 0;
   visibility: hidden;
 }
+
+.np-carousel::-webkit-scrollbar {
+  display: none;
+}
+.np-carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.np-carousel-card {
+  flex: 0 0 auto;
+  width: 264px;
+}
