@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
+import { jwtVerify, SignJWT } from "jose";
+import { UserInfo } from "./shared/interface";
 
-const JWT_SECRET = process.env.JWT_SECRET || "";
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function middleware(req: NextRequest) {
     const token = req.cookies.get("token")?.value;
@@ -12,11 +13,16 @@ export async function middleware(req: NextRequest) {
         }
 
         try {
-            const payload = jwt.verify(token, JWT_SECRET);
+            let user: UserInfo | null = null;
+            const decoded = await jwtVerify(token, JWT_SECRET);
+            if (typeof decoded === "object" && decoded != null && decoded.payload != null) {
+                user = decoded.payload as unknown as UserInfo;
+            }
 
-            const newToken = jwt.sign({ user: payload }, JWT_SECRET, {
-                expiresIn: "1h",
-            });
+            const newToken = await new SignJWT({ ...user })
+                .setProtectedHeader({ alg: "HS256"})
+                .setExpirationTime("1h")
+                .sign(JWT_SECRET);
 
             const res = NextResponse.next();
             res.cookies.set("token", newToken, {

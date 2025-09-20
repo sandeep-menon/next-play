@@ -157,7 +157,7 @@ export default function LoginPage() {
                             <CardContent className="grid gap-6">
                                 <div className="grid gap-3">
                                     <Label htmlFor="login-username">Username</Label>
-                                    <Input id="login-username" placeholder="Enter your username..." {...registerLogin("username")} />
+                                    <Input id="login-username" autoCapitalize="none" placeholder="Enter your username..." {...registerLogin("username")} />
                                     {loginErrors.username && <FormErrorMessage>{loginErrors.username.message}</FormErrorMessage>}
                                 </div>
                                 <div className="grid gap-3">
