@@ -30,7 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen gap-4`}
       >
-        <header className="border-b sticky top-0 backdrop-blur-lg shadow-lg">
+        <header className="border-b sticky top-0 backdrop-blur-lg shadow-lg bg-background/50">
           <Navbar />
         </header>
         <main className="flex-1 max-w-[1280px] md:mx-auto px-4">

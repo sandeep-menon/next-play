@@ -191,7 +191,7 @@ export default function LoginPage() {
                                 </div>
                             </CardContent>
                             <CardFooter className="flex justify-between items-center">
-                                <Button type="submit">
+                                <Button type="submit" disabled={loadingSignUp}>
                                     {loadingSignUp && <Loader className="animate-spin" />}
                                     Sign Up
                                 </Button>
