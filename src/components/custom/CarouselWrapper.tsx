@@ -18,33 +18,35 @@ export default function CarouselWrapper({ initialContent }: { initialContent: Ga
             carouselRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" })
         }
     }
-    const handleScroll = async () => {
-        if (!carouselRef.current || loading) return;
 
-        const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-
-        if (scrollLeft + clientWidth >= scrollWidth - 100) {
-            setLoading(true);
-
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/get-top-rated-games?offset=${offset}`);
-                const data:GameType[] = await res.json();
-
-                if (data && data.length > 0) {
-                    setGames((prev) => [...prev, ...data]);
-                    setOffset((prev) => prev + 10);
-                }
-            } catch (error) {
-                console.error("Failed to fetch more games: ", error);
-            } finally {
-                setLoading(false);
-            }
-        }
-    }
 
     useEffect(() => {
         const el = carouselRef.current;
         if (!el) return;
+
+        const handleScroll = async () => {
+            if (!carouselRef.current || loading) return;
+
+            const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+
+            if (scrollLeft + clientWidth >= scrollWidth - 100) {
+                setLoading(true);
+
+                try {
+                    const res = await fetch(`/api/get-top-rated-games?offset=${offset}`);
+                    const data: GameType[] = await res.json();
+
+                    if (data && data.length > 0) {
+                        setGames((prev) => [...prev, ...data]);
+                        setOffset((prev) => prev + 10);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch more games: ", error);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        }
 
         el.addEventListener("scroll", handleScroll);
         return () => el.removeEventListener("scroll", handleScroll);
@@ -57,7 +59,7 @@ export default function CarouselWrapper({ initialContent }: { initialContent: Ga
                     <CarouselCard key={item.id} game={item} />
                 ))}
 
-                { loading && (
+                {loading && (
                     <div className="flex items-center justify-center min-w-[80px]">
                         <Loader className="animate-spin h-8 w-8 text-blue-400" />
                     </div>

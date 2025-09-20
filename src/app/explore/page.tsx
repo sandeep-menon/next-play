@@ -1,14 +1,13 @@
 import CarouselWrapper from "@/components/custom/CarouselWrapper";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { GameType } from "@/shared/interface";
-import { ArrowBigRight } from "lucide-react";
 
 export default async function ExplorePage() {
+    const baseUrl = process.env.VERCEL_URL ? `${process.env.VERCEL_URL}` : process.env.NEXT_PUBLIC_BASE_URL;
 
     const offset = 0;
     let games: GameType[] = [];
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/get-top-rated-games?offset=${offset}`, { next: { revalidate: 60 } });
+    const res = await fetch(`${baseUrl}/api/get-top-rated-games?offset=${offset}`, { next: { revalidate: 60 } });
     if (res.ok) {
         games = await res.json();
     }
