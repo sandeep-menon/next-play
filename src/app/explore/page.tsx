@@ -1,16 +1,10 @@
 import CarouselWrapper from "@/components/custom/CarouselWrapper";
 import { Input } from "@/components/ui/input";
+import { getTopRatedGames } from "@/lib/igdbHandler";
 import { GameType } from "@/shared/interface";
 
 export default async function ExplorePage() {
-    const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : process.env.NEXT_PUBLIC_BASE_URL;
-
-    const offset = 0;
-    let games: GameType[] = [];
-    const res = await fetch(`${baseUrl}/api/get-top-rated-games?offset=${offset}`, { next: { revalidate: 60 } });
-    if (res.ok) {
-        games = await res.json();
-    }
+    const games: GameType[] = await getTopRatedGames(0);
 
     return (
         <div className="flex flex-col gap-4 w-full">
