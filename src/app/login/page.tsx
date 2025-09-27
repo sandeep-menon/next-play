@@ -63,9 +63,9 @@ export default function LoginPage() {
                 password: data.password,
             });
 
-            const { user } = res.data;
+            const { user, token } = res.data;
 
-            setUser(user);
+            setUser(user, token);
             toast.success("Login successful");
             router.push("/explore");
         } catch (error) {

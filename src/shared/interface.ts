@@ -14,6 +14,7 @@ export interface UserInfo {
     username: string;
     avatar: string;
     config: UserConfig;
+    exp: number;
 }
 
 export interface UserConfig {

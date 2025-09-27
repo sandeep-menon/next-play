@@ -5,7 +5,7 @@ export async function POST() {
         { message: "Logged out" },
         {
             headers: {
-                "Set-Cookie": `token=; HttpOnly; Path=/; Max-Age=3600; SameSite=Lax`
+                "Set-Cookie": `token=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax`
             }
         }
     )

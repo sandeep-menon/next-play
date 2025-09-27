@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
+import { useUserStore } from "@/store/userStore";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
@@ -9,6 +10,8 @@ import { useRef } from "react";
 
 export default function Home() {
   const container = useRef<HTMLDivElement>(null);
+  const { isTokenExpired } = useUserStore();
+  const isSessionExpired = isTokenExpired();
 
   useGSAP(() => {
     if (container.current) {
@@ -30,7 +33,7 @@ export default function Home() {
       <div className="item-3 md:text-lg md:max-w-6/12 text-center">Discover your next favorite game. Search across thousands of titles, save the ones you love, and get personalized recommendations. NextPlay makes game discovery simple, fun and tailored for you.</div>
       <div className="item-4 flex gap-4">
         <Button variant="secondary" asChild><Link href="/explore">Explore</Link></Button>
-        <Button variant="outline" asChild><Link href="/login">Login</Link></Button>
+        {isSessionExpired && <Button variant="outline" asChild><Link href="/login">Login</Link></Button>}
       </div>
     </div>
   );

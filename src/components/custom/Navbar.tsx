@@ -15,13 +15,12 @@ interface NavbarProps {
 export default function Navbar({ initialUser }: NavbarProps) {
     const user = useUserStore((state) => state.user);
     const setUser = useUserStore((state) => state.setUser);
-    const clearUser = useUserStore((state) => state.clearUser);
     const pathname = usePathname();
     const router = useRouter();
 
     useEffect(() => {
         if (initialUser && !user) {
-            setUser(initialUser);
+            setUser(initialUser, "");
         }
     }, [initialUser, user, setUser]);
 
@@ -37,7 +36,7 @@ export default function Navbar({ initialUser }: NavbarProps) {
 
         if (res.ok) {
             toast.success("Logged out");
-            clearUser();
+            useUserStore.getState().clearUser();
             router.push("/explore");
         } else {
             toast.error("Something went wrong");
