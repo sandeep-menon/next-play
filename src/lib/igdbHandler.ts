@@ -55,8 +55,8 @@ export async function getGameDetails(id: string) {
             cover: getImageURL(game.cover.url, "t_cover_big"),
             genres: game.genres.map((g: { id: string; name: string }) => g.name),
             first_release_date: game.first_release_date * 1000,
-            developers: getDevelopers(game.involved_companies),
-            publishers: getPublishers(game.involved_companies),
+            developers: getDevelopers(game?.involved_companies) ?? [],
+            publishers: getPublishers(game?.involved_companies) ?? [],
             platforms: game.platforms.map((p: {id: string, name: string}) => p.name),
             game_engines: game.game_engines?.map((e: {id: string, name: string}) => e.name) ?? ["Proprietary"],
             rating: game.rating ?? 0,
@@ -67,7 +67,7 @@ export async function getGameDetails(id: string) {
             screenshots: game.screenshots?.map((s: {id: string, url: string}) => 
                 getImageURL(s.url, "t_1080p")
             ) ?? [],
-            similar_games: parseSimilarGames(game.similar_games) ?? []
+            similar_games: parseSimilarGames(game?.similar_games) ?? []
         };
     }
 }
@@ -92,6 +92,7 @@ export async function searchGame(name: string) {
 }
 
 function getDevelopers(companies: CompanyProps[]) {
+    if (!companies) return;
     const developers: { name: string; url: string; }[] = [];
     companies.forEach((company: CompanyProps) => {
         if (company.developer) {
@@ -107,6 +108,7 @@ function getDevelopers(companies: CompanyProps[]) {
 }
 
 function getPublishers(companies: CompanyProps[]) {
+    if (!companies) return;
     const publishers: { name: string; url: string }[] = [];
     companies.forEach((company: CompanyProps) => {
         if (company.publisher) {
@@ -122,6 +124,7 @@ function getPublishers(companies: CompanyProps[]) {
 }
 
 function parseSimilarGames(games: SimilarGameType[]) {
+    if (!games) return;
     const similar_games: { id: string, name: string, cover: string, genres: string[] }[] = [];
     games.forEach((game: SimilarGameType) => {
         const temp = {
