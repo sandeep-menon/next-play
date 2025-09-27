@@ -3,11 +3,13 @@
 import { useState } from "react";
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogTitle,
     DialogTrigger,
 } from "../ui/dialog";
 import Image from "next/image";
+import { Button } from "../ui/button";
 
 export default function ImageGallery({ data }: { data: string[] }) {
     const [selected, setSelected] = useState<string | null>(null);
@@ -28,7 +30,7 @@ export default function ImageGallery({ data }: { data: string[] }) {
                         />
                     </DialogTrigger>
 
-                    <DialogContent className="h-screen w-screen flex items-center justify-center bg-black/90 p-4">
+                    <DialogContent className="h-screen w-screen flex flex-col items-center justify-center bg-black/90 p-4">
                         {selected && (
                             <Image
                                 src={selected}
@@ -38,7 +40,11 @@ export default function ImageGallery({ data }: { data: string[] }) {
                                 className="object-contain"
                             />
                         )}
+                        <DialogClose asChild>
+                            <Button>Close</Button>
+                        </DialogClose>
                     </DialogContent>
+
                 </Dialog>
             ))}
         </div>
