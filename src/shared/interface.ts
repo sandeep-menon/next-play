@@ -34,3 +34,33 @@ export interface SearchResultItem {
     id: string;
     name: string;
 }
+
+export interface CompanyProps {
+    id: string;
+    developer: boolean;
+    publisher: boolean;
+    company: CompanyType;
+}
+
+export interface CompanyType {
+    id: string;
+    name: string;
+    websites: WebsiteType[];
+}
+
+export interface WebsiteType {
+    id: string;
+    url: string;
+}
+
+export interface SimilarGameType {
+    id: string;
+    name: string;
+    cover: CoverType;
+    genres: GenreType[];
+}
+
+export interface GenreType {
+    id: string;
+    name: string;
+}
