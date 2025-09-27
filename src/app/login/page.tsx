@@ -130,7 +130,7 @@ export default function LoginPage() {
                 await axios.get(`/api/check-username?username=${username}`);
                 return { available: true };
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 return { available: false };
             }
         }

@@ -20,3 +20,16 @@ export interface UserConfig {
     platforms?: string[];
     favourites?: string[];
 }
+
+export interface GameDetails {
+    id: string;
+    name: string;
+    summary: string;
+    cover: string;
+    genres: string[];
+}
+
+export interface SearchResultItem {
+    id: string;
+    name: string;
+}

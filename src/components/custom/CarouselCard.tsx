@@ -1,13 +1,14 @@
 import { GameType } from "@/shared/interface";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function CarouselCard({ game }: { game: GameType }) {
+    const router = useRouter();
 
     const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
         const gameId = e.currentTarget.dataset.gameId;
-        console.log("Game Id: ", gameId);
-        // TODO: open game's homepage
+        router.push(`/game/${gameId}`);
     }
 
     return (

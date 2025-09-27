@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
         const data = await getTopRatedGames(offset);
         return NextResponse.json(data, { status: 200 });
     } catch (e) {
-        console.log(e);
+        console.error(e);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
     }
 }
